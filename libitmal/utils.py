@@ -25,7 +25,7 @@ def isNumpyArray(x):
 
 def isFloat(x):
     # is there a python single/double float??
-    return isinstance(x, float) or isinstance(x, np.float32) or isinstance(x, np.float64) or isinstance(x, np.float128)      
+    return isinstance(x, float) or isinstance(x, np.float32) or isinstance(x, np.float64) # or isinstance(x, np.float128)      
 
 def ListToVector(l):
     if not isList(l): 

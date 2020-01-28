@@ -9,7 +9,7 @@ pub: hasDAV
 	@ cp -v -u -r L?? $(DIR)
 	@ echo "CP libitmal, remote.."
 	@ cp -v -u -r libitmal $(DIR)
-	@ git st
+	@ git status
 	@ echo -n "Server itu git pull.." && (ssh itu "cd F20_itmal && git pull") || echo "failed"
 	@ echo "ALL OK"
 
