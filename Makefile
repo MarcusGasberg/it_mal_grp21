@@ -1,14 +1,17 @@
 DAV = /mnt/Dav/ITMAL
 DIR = $(DAV)/"File Sharing"
 TEXDIR=/home/cef/ASE/ITMAL/TeX
+EXCLUDEPAT=--exclude='*~' --exclude='.ipynb*' --exclude='__pycache__'
 
 pub: hasDAV
 	@ echo "CP lessons, local.."
 	@ cp -v -u $(TEXDIR)/lesson01.pdf L01/lesson01.pdf
 	@ echo "CP lessons, remote.."
-	@ cp -v -u -r L?? $(DIR)
+	@# cp -v -u -r L?? $(DIR)
+	@ rsync -avr $(EXCLUDEPAT) L?? $(DIR)
 	@ echo "CP libitmal, remote.."
-	@ cp -v -u -r libitmal $(DIR)
+	@# cp -v -u -r libitmal $(DIR)
+	@ rsync -avr $(EXCLUDEPAT) libitmal $(DIR)
 	@ git status
 	@ echo -n "Server itu git pull.." && (ssh itu "cd F20_itmal && git pull") || echo "failed"
 	@ echo "ALL OK"
@@ -32,6 +35,8 @@ clean:
 	find . -iname '.ipynb_checkpoints' -exec rm -rf {} \; || true
 	find . -iname '__pycache__' -exec rm -rf {} \; || true
 	find $(DIR) -iname '.ipynb_checkpoints' -exec rm -rf {} \; || true
+	find $(DIR) -iname '__pycache__' -exec rm -rf {} \; || true
+	find $(DIR) -iname '*~' -exec rm -rf {} \; || true
 	
 #cp lessons..
 #'L01/demo.ipynb' -> '/mnt/Dav/ITMAL/File Sharing/Src/L01/demo.ipynb'
