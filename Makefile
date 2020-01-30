@@ -7,8 +7,8 @@ pub: hasDAV
 	@ echo "CP lessons, local.."
 	@ cp -v -u $(TEXDIR)/lesson01.pdf L01/lesson01.pdf
 	@ echo "CP lessons, remote.."
-	@# cp -v -u -r L?? $(DIR)
-	@ rsync -avr $(EXCLUDEPAT) L?? $(DIR)
+	@ cp -v -u -r L?? $(DIR)
+	@# rsync -avr $(EXCLUDEPAT) L?? $(DIR)
 	@ echo "CP libitmal, remote.."
 	@# cp -v -u -r libitmal $(DIR)
 	@ rsync -avr $(EXCLUDEPAT) libitmal $(DIR)
