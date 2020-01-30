@@ -336,7 +336,10 @@ def TEST(expr):
 def TestCheckFloat():
     e=0
     CheckFloat(42.)
-    CheckFloat(42)
+    try:
+	    CheckFloat(42)
+    except: 
+      e += 1
     try:
         CheckFloat(inf)
     except:
@@ -359,7 +362,7 @@ def TestCheckFloat():
     except:
         e += 1
 
-    assert e==5,"Test of CheckFloat() failed"
+    assert e==6,"Test of CheckFloat() failed"
     print("TEST: OK")
 
 def TestVarName():

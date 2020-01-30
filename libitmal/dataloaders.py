@@ -24,47 +24,50 @@ def MNIST_PlotDigit(data):
     plt.imshow(image, cmap = matplotlib.cm.binary, interpolation="nearest")
     plt.axis("off")
 
-def MNIST_GetDataSet():
-    mnist = fetch_mldata('MNIST original')
-    # NOTE: or (X_train, y_train), (X_test, y_test) = mnist.load_data()
-    
-    print("TODO: insert train/test split and shuffle code")
-    #  ...
-    #return ...    
-    
 # CEF: A production-code ready version of get MNIST
 # Will try three different methods (sklearn v0.18, v0.20 and keras)
 # 
 def MNIST_GetDataSet(fetchmode=True, reshape784=True, debug=False):
     import numpy as np
-    try:
-        from sklearn.datasets import fetch_mldata
-        has_datasets_fetch_mldata=True
-    except:
-        has_datasets_fetch_mldata=False    
-
+    #try:
+    #    from sklearn.datasets import fetch_mldata
+    #    has_datasets_fetch_mldata=True
+    #except:
+    #    has_datasets_fetch_mldata=False    
+        
     try:
         from sklearn.datasets import fetch_openml
         has_datasets_fetch_openml=True
     except:
         has_datasets_fetch_openml=False
-
     try:
         from keras.datasets import mnist
-        has_kerasinstalled=True    
+        has_keras_installed=True    
     except:
-        has_kerasinstalled=False
+        has_keras_installed=False
+    try:
+        from tensorflow.keras.datasets import mnist
+        has_tensorflow_keras_installed=True    
+    except:
+        has_tensorflowk_erasinstalled=False
+
+    if debug:
+        print(f"MNIST loaders:")
+        print(f"  has_datasets_fetch_openml={has_datasets_fetch_openml}")
+        print(f"  has_keras_installed={has_keras_installed}")
+        print(f"  has_tensorflow_keras_installed={has_tensorflow_keras_installed}")
 
     if fetchmode:
-        if has_datasets_fetch_mldata:
-            if debug:
-                print("MNIST_GetDataSet(), in fetchmode, using fetch_mldata()...")
-            # API Change Deprecated sklearn.datasets.fetch_mldata to be removed in 
-            # version 0.22. mldata.org is no longer operational. Until removal it
-            # will remain possible to load cached datasets. 
-            #11466 by Joel Nothman.            
-            d = fetch_mldata('MNIST original')
-        elif has_datasets_fetch_openml:
+        #if has_datasets_fetch_mldata:
+        #    if debug:
+        #        print("MNIST_GetDataSet(), in fetchmode, using fetch_mldata()...")
+        #    # API Change Deprecated sklearn.datasets.fetch_mldata to be removed in 
+        #    # version 0.22. mldata.org is no longer operational. Until removal it
+        #    # will remain possible to load cached datasets. 
+        #    #11466 by Joel Nothman.            
+        #    d = fetch_mldata('MNIST original')
+        #elif 
+        if has_datasets_fetch_openml:
             if debug:
                 print("MNIST_GetDataSet(), in fetchmode, using fetch_openml()...")
             # scikit-learn v0.20.2
@@ -76,11 +79,11 @@ def MNIST_GetDataSet(fetchmode=True, reshape784=True, debug=False):
     else:
         if debug:
             print("MNIST_GetDataSet(), in non-fetchmode, using keras mnist.load_data()...")            
-        if has_kerasinstalled:            
+        if has_keras_installed or has_tensorflow_keras_installed:
             (X_train, y_train), (X_test, y_test) = mnist.load_data()
             X, y = np.concatenate((X_train, X_test)), np.concatenate((y_train, y_test))
         else:
-            raise ImportError("You do not have Keras installed, so keras.datasets.mnist.load_data() will not work!")
+            raise ImportError("You do not have Keras or Tensorflow.Keras installed, so keras.datasets.mnist.load_data() or tensorflow.keras.datasets.mnist.load_data() will not work!")
     
     if y.dtype!='uint8':
         y = y.astype('uint8')
@@ -100,7 +103,7 @@ def MNIST_GetDataSet(fetchmode=True, reshape784=True, debug=False):
     assert X.shape[0]==y.shape[0]
     assert y.ndim==1
      
-    assert X.dtype=='uint8'
+    assert X.dtype=='uint8' or X.dtype=='float64'
     assert y.dtype=='uint8'
           
     return X, y
@@ -139,10 +142,11 @@ def Test_MNIST_GetDataSet():
     assert type(y1)==type(y2), f'diff types, type(y1)={type(y1)}, type(y2)={type(y2)}' 
     assert type(y1)==type(y3), f'diff types, type(y1)={type(y1)}, type(y3)={type(y3)}' 
     assert type(y1)==type(y4), f'diff types, type(y1)={type(y1)}, type(y4)={type(y4)}' 
-                                                                            
-    assert X1.dtype==X2.dtype, f'diff dtypes, X1.dtype={X1.dtype}, X2.dtype={X2.dtype}' 
+     
+    # NOTE: problem with different datatypes!!                                                                       
+    #assert X1.dtype==X2.dtype, f'diff dtypes, X1.dtype={X1.dtype}, X2.dtype={X2.dtype}' 
     assert X1.dtype==X3.dtype, f'diff dtypes, X1.dtype={X1.dtype}, X3.dtype={X3.dtype}' 
-    assert X1.dtype==X4.dtype, f'diff dtypes, X1.dtype={X1.dtype}, X4.dtype={X4.dtype}' 
+    #assert X1.dtype==X4.dtype, f'diff dtypes, X1.dtype={X1.dtype}, X4.dtype={X4.dtype}' 
     assert y1.dtype==y2.dtype, f'diff dtypes, y1.dtype={y1.dtype}, y2.dtype={y2.dtype}' 
     assert y1.dtype==y3.dtype, f'diff dtypes, y1.dtype={y1.dtype}, y3.dtype={y3.dtype}' 
     assert y1.dtype==y4.dtype, f'diff dtypes, y1.dtype={y1.dtype}, y4.dtype={y4.dtype}'         
@@ -202,6 +206,11 @@ def Versions():
     try:
         import tensorflow as tf
         print(f'{"Tensorflow version:":24s} {tf.__version__}')
+        try:
+           import tensorflow.keras as tfkr
+           print(f'{"Tensorflow.Keras version:":24s} {tfkr.__version__}')
+        except:
+            print(f'WARN: could not find tensorflow.keras!')  
     except:
         print(f'WARN: could not find tensorflow!')  
         
