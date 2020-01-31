@@ -1,3 +1,5 @@
+#!/opt/anaconda3/bin/python
+
 def Versions():    
     import sys
     print(f'{"Python version:":24s} {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}.')
