@@ -2,17 +2,29 @@ def Versions():
     import sys
     print(f'{"Python version:":24s} {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}.')
     try:
-        import sklearn as skl 
-        print(f'{"Scikit-learn version:":24s} {skl.__version__}.')
+        import sklearn as version_skl 
+        print(f'{"Scikit-learn version:":24s} {version_skl.__version__}.')
     except:
         print(f'WARN: could not find sklearn!')  
     try:
-        import keras as kr
-        print(f'{"Keras version:":24s} {kr.__version__}')
+        import keras as version_kr
+        print(f'{"Keras version:":24s} {version_kr.__version__}')
     except:
         print(f'WARN: could not find keras!')  
     try:
-        import tensorflow as tf
-        print(f'{"Tensorflow version:":24s} {tf.__version__}')
+        import tensorflow as version_tf
+        print(f'{"Tensorflow version:":24s} {version_tf.__version__}')
     except:
         print(f'WARN: could not find tensorflow!')  
+    try:
+        import tensorflow.keras as version_tf_kr
+        print(f'{"Tensorflow version:":24s} {version_tf_kr.__version__}')
+    except:
+        print(f'WARN: could not find tensorflow.keras!')  
+
+def TestAll():
+	Versions()
+	print("ALL OK")
+
+if __name__ == '__main__':
+	TestAll()
