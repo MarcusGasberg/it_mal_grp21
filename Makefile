@@ -6,12 +6,13 @@ EXCLUDEPAT=--exclude='*~' --exclude='.ipynb*' --exclude='__pycache__'
 pub: hasDAV
 	@ echo "CP lessons, local.."
 	@ cp -v -u $(TEXDIR)/lesson01.pdf L01/lesson01.pdf
+	@ cp -v -u $(TEXDIR)/lesson02.pdf L02/lesson02.pdf
 	@ echo "CP lessons, remote.."
 	@ cp -v -u -r L?? $(DIR)
 	@# rsync -avr $(EXCLUDEPAT) L?? $(DIR)
 	@ echo "CP libitmal, remote.."
-	@# cp -v -u -r libitmal $(DIR)
-	@ rsync -avr $(EXCLUDEPAT) libitmal $(DIR)
+	@ cp -v -u -r libitmal $(DIR)
+	@# rsync -avr $(EXCLUDEPAT) libitmal $(DIR)
 	@ git status
 	@ echo -n "Server itu git pull.." && (ssh itu "cd F20_itmal && git pull") || echo "failed"
 	@ echo "ALL OK"
@@ -26,6 +27,7 @@ hasDAV:
 diff: hasDAV
 	diff -dwqr -x '*~' -x '.git*' -x 'Makefile' -x 'Solutions' -x 'Old' -x 'Src' -x 'datasets' . $(DIR) || echo "DIFFS(1)!"
 	diff  $(TEXDIR)/lesson01.pdf L01/lesson01.pdf || echo "DIFFS(2)!"
+	diff  $(TEXDIR)/lesson02.pdf L02/lesson02.pdf || echo "DIFFS(3)!"
 	@ echo "OK"
 
 #lessons:
