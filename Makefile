@@ -13,13 +13,11 @@ pub: hasDAV
 	@ echo "CP libitmal, remote.."
 	@ cp -v -u -r libitmal $(DIR)
 	@# rsync -avr $(EXCLUDEPAT) libitmal $(DIR)
-	@ git status
-	@ echo -n "Server itu git pull.." && (ssh itu "cd F20_itmal && git pull") || echo "failed"
-	@ echo "ALL OK"
 
 update:
 	@ git status
-	@ ssh -A -Y itu "cd F20_itmal && git pull"
+	@ echo -n "Server itu git pull.." && (ssh itu "cd F20_itmal && git pull") || echo "failed"
+	@ echo "ALL OK"
 
 hasDAV:
 	@ cat /proc/mounts | grep $(DAV) >/dev/null || (echo "ERROR: DAV dir $(DAV) not mounted" && false)	
